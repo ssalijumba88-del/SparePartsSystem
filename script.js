@@ -1,3 +1,10 @@
+const supabaseUrl = "https://rqdarfipdywewgdsavsk.supabase.co/rest/v1/";
+const supabaseKey = "sb_publishable_kwf-2cqsUeaxAtQ_MxZ0mw_MTQja370";
+
+const supabaseClient = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
 let parts = JSON.parse(localStorage.getItem("parts")) || [];
 let editIndex = -1;
 
