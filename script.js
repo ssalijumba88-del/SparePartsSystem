@@ -32,6 +32,9 @@ const { data, error } = await supabaseClient
     .insert([
         {
             name: name,
+            part_number: partNumber,
+            category: category,
+            price: Number(price),
             quantity: Number(quantity)
         }
     ]);
