@@ -8,7 +8,7 @@ const supabaseClient = window.supabase.createClient(
 let parts = JSON.parse(localStorage.getItem("parts")) || [];
 let editIndex = -1;
 
-function addPart() {
+async function addPart() {
     const name = document.getElementById("partName").value;
     const partNumber = document.getElementById("partNumber").value;
     const category = document.getElementById("partCategory").value;
@@ -27,7 +27,20 @@ function addPart() {
         price: Number(price),
         quantity: Number(quantity)
     };
+const { data, error } = await supabaseClient
+    .from("parts")
+    .insert([
+        {
+            name: name,
+            quantity: Number(quantity)
+        }
+    ]);
 
+if (error) {
+    console.error(error);
+    alert("Error saving part to Supabase");
+    return;
+}
     if (editIndex === -1) {
         parts.push(part);
     } else {
