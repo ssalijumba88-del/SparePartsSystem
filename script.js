@@ -128,6 +128,30 @@ function displayParts() {
 
     list.innerHTML = output;
 }
+async function loadParts() {
+    const { data, error } = await supabaseClient
+        .from("parts")
+        .select("*");
+
+    if (error) {
+        console.error(error);
+        alert("Error loading parts from Supabase");
+        return;
+    }
+
+    parts = data.map(function(part) {
+        return {
+            id: part.id,
+            name: part.name,
+            partNumber: part.part_number || "",
+            category: part.category || "",
+            price: Number(part.price) || 0,
+            quantity: Number(part.quantity) || 0
+        };
+    });
+
+    displayParts();
+}
 
 function editPart(index) {
     document.getElementById("partName").value = parts[index].name;
