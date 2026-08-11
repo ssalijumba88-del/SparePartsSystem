@@ -263,5 +263,5 @@ function searchParts() {
     list.innerHTML = output;
 }
 window.onload = function() {
-    displayParts();
+    loadParts();
 }
