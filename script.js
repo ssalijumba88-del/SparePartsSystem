@@ -172,7 +172,7 @@ function deletePart(index) {
 
     displayParts();
 }
-function stockIn(index) {
+async function stockIn(index) {
     let amount = prompt("Enter quantity to add:");
 
     if (amount === null) {
@@ -186,9 +186,26 @@ function stockIn(index) {
         return;
     }
 
-    parts[index].quantity = Number(parts[index].quantity) + amount;
+    const newQuantity =
+        Number(parts[index].quantity) + amount;
 
-    localStorage.setItem("parts", JSON.stringify(parts));
+    const { error } = await supabaseClient
+        .from("parts")
+        .update({ quantity: newQuantity })
+        .eq("id", parts[index].id);
+
+    if (error) {
+        console.error("Stock In error:", error);
+        alert("Failed to update stock in Supabase.");
+        return;
+    }
+
+    parts[index].quantity = newQuantity;
+
+    localStorage.setItem(
+        "parts",
+        JSON.stringify(parts)
+    );
 
     displayParts();
 }
