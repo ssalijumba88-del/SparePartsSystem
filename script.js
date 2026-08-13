@@ -186,8 +186,7 @@ async function stockIn(index) {
         return;
     }
 
-    const newQuantity =
-        Number(parts[index].quantity) + amount;
+    const newQuantity = Number(parts[index].quantity) + amount;
 
     const { error } = await supabaseClient
         .from("parts")
@@ -195,17 +194,12 @@ async function stockIn(index) {
         .eq("id", parts[index].id);
 
     if (error) {
-        console.error("Stock In error:", error);
-        alert("Failed to update stock in Supabase.");
+        console.error(error);
+        alert("Error updating stock.");
         return;
     }
 
     parts[index].quantity = newQuantity;
-
-    localStorage.setItem(
-        "parts",
-        JSON.stringify(parts)
-    );
 
     displayParts();
 }
