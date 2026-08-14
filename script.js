@@ -20,39 +20,48 @@ async function addPart() {
         return;
     }
 
-    const part = {
-        name: name,
-        partNumber: partNumber,
-        category: category,
-        price: Number(price),
-        quantity: Number(quantity)
-    };
-const { data, error } = await supabaseClient
-    .from("parts")
-    .insert([
-        {
-            name: name,
-            part_number: partNumber,
-            category: category,
-            price: Number(price),
-            quantity: Number(quantity)
-        }
-    ]);
-
-if (error) {
-    console.error(error);
-    alert("Error saving part to Supabase");
-    return;
-}
     if (editIndex === -1) {
-        parts.push(part);
+
+        const { error } = await supabaseClient
+            .from("parts")
+            .insert([
+                {
+                    name: name,
+                    part_number: partNumber,
+                    category: category,
+                    price: Number(price),
+                    quantity: Number(quantity)
+                }
+            ]);
+
+        if (error) {
+            console.error(error);
+            alert("Error saving part to Supabase");
+            return;
+        }
+
     } else {
-        parts[editIndex] = part;
+
+        const { error } = await supabaseClient
+            .from("parts")
+            .update({
+                name: name,
+                part_number: partNumber,
+                category: category,
+                price: Number(price),
+                quantity: Number(quantity)
+            })
+            .eq("id", parts[editIndex].id);
+
+        if (error) {
+            console.error(error);
+            alert("Error updating part in Supabase");
+            return;
+        }
+
         editIndex = -1;
         document.getElementById("addButton").innerHTML = "Add Part";
     }
-
-    localStorage.setItem("parts", JSON.stringify(parts));
 
     document.getElementById("partName").value = "";
     document.getElementById("partNumber").value = "";
@@ -60,9 +69,8 @@ if (error) {
     document.getElementById("partPrice").value = "";
     document.getElementById("partQuantity").value = "";
 
-    displayParts();
+    await loadParts();
 }
-
 function displayParts() {
     let totalParts = parts.length;
     let lowStock = 0;
