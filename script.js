@@ -172,14 +172,7 @@ function editPart(index) {
 
     document.getElementById("addButton").innerHTML = "Update Part";
 }
-
 async function deletePart(index) {
-    const confirmDelete = confirm("Are you sure you want to delete this part?");
-
-    if (!confirmDelete) {
-        return;
-    }
-
     const { error } = await supabaseClient
         .from("parts")
         .delete()
@@ -195,7 +188,7 @@ async function deletePart(index) {
 
     displayParts();
 }
-}
+
 async function stockIn(index) {
     let amount = prompt("Enter quantity to add:");
 
