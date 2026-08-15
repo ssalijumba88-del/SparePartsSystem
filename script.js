@@ -173,12 +173,28 @@ function editPart(index) {
     document.getElementById("addButton").innerHTML = "Update Part";
 }
 
-function deletePart(index) {
+async function deletePart(index) {
+    const confirmDelete = confirm("Are you sure you want to delete this part?");
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("parts")
+        .delete()
+        .eq("id", parts[index].id);
+
+    if (error) {
+        console.error("Delete error:", error);
+        alert("Error deleting part from Supabase.");
+        return;
+    }
+
     parts.splice(index, 1);
 
-    localStorage.setItem("parts", JSON.stringify(parts));
-
     displayParts();
+}
 }
 async function stockIn(index) {
     let amount = prompt("Enter quantity to add:");
